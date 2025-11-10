@@ -1,0 +1,15 @@
+version: "3.8"
+
+services:
+  test-runner:
+    build:
+      context: ..
+      dockerfile: tests/Dockerfile
+    volumes:
+      # Mount source code for live updates during development
+      - ../api_handler:/app/api_handler:ro
+      - ../task_processor:/app/task_processor:ro
+      - .:/app/tests:ro
+    environment:
+      - PYTHONDONTWRITEBYTECODE=1
+      - PYTHONUNBUFFERED=1

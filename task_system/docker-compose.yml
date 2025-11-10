@@ -1,0 +1,60 @@
+version: "3.8"
+
+services:
+  localstack:
+    image: localstack/localstack:latest
+    container_name: localstack-task-api
+    ports:
+      - "4566:4566"            # LocalStack Gateway (main endpoint)
+      - "4510-4559:4510-4559"  # External services port range
+    environment:
+      # Core LocalStack configuration
+      - DEBUG=1
+      - AWS_DEFAULT_REGION=us-east-1
+      - AWS_ACCESS_KEY_ID=test
+      - AWS_SECRET_ACCESS_KEY=test
+
+      # Services needed for task management API
+      - SERVICES=sqs,lambda,apigateway,cloudwatch,logs,iam,sts,cloudformation,ssm
+
+      # Lambda configuration
+      - LAMBDA_EXECUTOR=docker
+      - LAMBDA_RUNTIME_ENVIRONMENT_TIMEOUT=60
+      - LAMBDA_DOCKER_NETWORK=localstack-network
+      - LAMBDA_REMOVE_CONTAINERS=true
+      - LAMBDA_DOCKER_FLAGS=-e NODE_TLS_REJECT_UNAUTHORIZED=0
+
+      # Docker configuration
+      - DOCKER_HOST=unix:///var/run/docker.sock
+
+      # Performance and behavior
+      - EAGER_SERVICE_LOADING=1
+      - SKIP_SSL_CERT_DOWNLOAD=1
+
+      # Optional: Enable persistence (uncomment to keep data between restarts)
+      # - PERSISTENCE=1
+
+    volumes:
+      # Docker socket for Lambda executor
+      - "/var/run/docker.sock:/var/run/docker.sock"
+
+      # Persistence directory for LocalStack state
+      - "./.localstack:/var/lib/localstack"
+
+      # Lambda code directory (mounted for easy access)
+      - "./lambda:/tmp/lambda"
+
+    networks:
+      - localstack-network
+
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:4566/_localstack/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
+
+networks:
+  localstack-network:
+    name: localstack-network
+    driver: bridge

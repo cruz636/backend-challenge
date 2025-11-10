@@ -1,0 +1,25 @@
+{
+  "name": "task_system",
+  "version": "1.0.0",
+  "description": "A serverless task management API system built with AWS CDK, deployable to both AWS and LocalStack for local development.",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "dependencies": {
+    "aws-cdk-lib": "^2.222.0",
+    "constructs": "^10.4.3"
+  },
+  "devDependencies": {
+    "@types/node": "^24.10.0",
+    "tsx": "^4.20.6",
+    "typescript": "^5.9.3"
+  }
+}
