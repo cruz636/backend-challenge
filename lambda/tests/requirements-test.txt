@@ -1,0 +1,12 @@
+# Test dependencies for Lambda functions
+
+# Testing framework
+pytest>=7.4.0
+pytest-cov>=4.1.0
+pytest-mock>=3.12.0
+
+# AWS SDK for Python
+boto3>=1.28.0
+
+# Mocking and testing utilities
+moto>=4.2.0  # For mocking AWS services if needed
