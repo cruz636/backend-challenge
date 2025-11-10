@@ -1,20 +1,16 @@
 import json
-import pytest
-from unittest.mock import patch, MagicMock, call
 import os
 import sys
 from datetime import datetime
+from unittest.mock import MagicMock, call, patch
+
+import pytest
 
 # Add the lambda directory to the path
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "task_processor"))
 
-from task_handler import (
-    process,
-    process_task,
-    handle_high_priority_task,
-    handle_normal_priority_task,
-    handle_low_priority_task,
-)
+from task_handler import (handle_high_priority_task, handle_low_priority_task,
+                          handle_normal_priority_task, process, process_task)
 
 
 class TestHandlePriorityTasks:

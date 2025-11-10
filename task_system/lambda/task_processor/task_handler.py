@@ -1,7 +1,8 @@
 import json
-import boto3
 import os
 from datetime import datetime, timedelta
+
+import boto3
 
 
 def process(event, context):

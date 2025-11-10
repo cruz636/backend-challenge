@@ -2,9 +2,10 @@
 Pytest configuration and shared fixtures for Lambda tests
 """
 
-import pytest
 import os
 import sys
+
+import pytest
 
 # Add lambda directories to Python path
 lambda_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))

@@ -1,13 +1,15 @@
 import json
-import pytest
-from unittest.mock import patch, MagicMock, call
 import os
 import sys
+from unittest.mock import MagicMock, call, patch
+
+import pytest
 
 # Add the lambda directory to the path
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "api_handler"))
 
-from handler import main, validate_api_token, get_sqs_client, _get_data_from_body
+from handler import (_get_data_from_body, get_sqs_client, main,
+                     validate_api_token)
 
 
 class TestValidateApiToken:

@@ -1,8 +1,9 @@
 import json
-import boto3
 import os
 import uuid
 from datetime import datetime
+
+import boto3
 
 
 def get_sqs_client():
