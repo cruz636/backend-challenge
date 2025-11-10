@@ -18,16 +18,16 @@ def process(event, context):
 
     print("Received event:", json.dumps(event, indent=2))
 
-    for record in event['Records']:
+    for record in event["Records"]:
         try:
-            message_body = json.loads(record['body'])
+            message_body = json.loads(record["body"])
 
             # Task details
-            task_id = message_body['task_id']
-            task_type = message_body['task_type']
-            description = message_body.get('description', 'No description provided')
-            priority = message_body.get('priority', 'normal')
-            created_at = message_body.get('created_at', datetime.utcnow().isoformat())
+            task_id = message_body["task_id"]
+            task_type = message_body["task_type"]
+            description = message_body.get("description", "No description provided")
+            priority = message_body.get("priority", "normal")
+            created_at = message_body.get("created_at", datetime.utcnow().isoformat())
 
             print(f"Processing task {task_id}:")
 
@@ -39,7 +39,7 @@ def process(event, context):
             print(f"Error processing task due to: {str(e)}")
             raise
 
-    return {'statusCode': 200, 'body': json.dumps('Tasks processed successfully')}
+    return {"statusCode": 200, "body": json.dumps("Tasks processed successfully")}
 
 
 def process_task(task_id, task_type, description, priority, created_at):
@@ -55,9 +55,9 @@ def process_task(task_id, task_type, description, priority, created_at):
     """
 
     priority_function_map = {
-        'high': handle_high_priority_task,
-        'normal': handle_normal_priority_task,
-        'low': handle_low_priority_task,
+        "high": handle_high_priority_task,
+        "normal": handle_normal_priority_task,
+        "low": handle_low_priority_task,
     }
 
     try:
@@ -71,11 +71,18 @@ def process_task(task_id, task_type, description, priority, created_at):
 
 
 def handle_high_priority_task(task_id, task_type, description, created_at):
-    print(f"[HIGH PRIORITY] Handling task {task_id} of type {task_type} created at {created_at}. Description: {description}")
+    print(
+        f"[HIGH PRIORITY] Handling task {task_id} of type {task_type} created at {created_at}. Description: {description}"
+    )
+
 
 def handle_normal_priority_task(task_id, task_type, description, created_at):
-    print(f"[NORMAL PRIORITY] Handling task {task_id} of type {task_type} created at {created_at}. Description: {description}")
+    print(
+        f"[NORMAL PRIORITY] Handling task {task_id} of type {task_type} created at {created_at}. Description: {description}"
+    )
+
 
 def handle_low_priority_task(task_id, task_type, description, created_at):
-    print(f"[LOW PRIORITY] Handling task {task_id} of type {task_type} created at {created_at}. Description: {description}")
-    
+    print(
+        f"[LOW PRIORITY] Handling task {task_id} of type {task_type} created at {created_at}. Description: {description}"
+    )

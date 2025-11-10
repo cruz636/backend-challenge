@@ -1,14 +1,15 @@
 """
 Pytest configuration and shared fixtures for Lambda tests
 """
+
 import pytest
 import os
 import sys
 
 # Add lambda directories to Python path
 lambda_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-sys.path.insert(0, os.path.join(lambda_root, 'api_handler'))
-sys.path.insert(0, os.path.join(lambda_root, 'task_processor'))
+sys.path.insert(0, os.path.join(lambda_root, "api_handler"))
+sys.path.insert(0, os.path.join(lambda_root, "task_processor"))
 
 
 @pytest.fixture(autouse=True)
@@ -30,7 +31,7 @@ def mock_env_local():
         "ENVIRONMENT": "local",
         "LOCALSTACK_ENDPOINT": "http://localstack:4566",
         "API_TOKEN": "test-token",
-        "QUEUE_URL": "http://localhost:4566/000000000000/test-queue.fifo"
+        "QUEUE_URL": "http://localhost:4566/000000000000/test-queue.fifo",
     }
 
 
@@ -44,7 +45,7 @@ def mock_env_production():
         "AWS_ACCESS_KEY_ID": "prod-key",
         "AWS_SECRET_ACCESS_KEY": "prod-secret",
         "API_TOKEN": "prod-token",
-        "QUEUE_URL": "https://sqs.us-east-1.amazonaws.com/123456789012/prod-queue.fifo"
+        "QUEUE_URL": "https://sqs.us-east-1.amazonaws.com/123456789012/prod-queue.fifo",
     }
 
 
@@ -52,11 +53,8 @@ def mock_env_production():
 def sample_api_event():
     """Fixture providing a sample API Gateway event"""
     return {
-        "headers": {
-            "X-Api-Key": "test-token",
-            "Content-Type": "application/json"
-        },
-        "body": '{"title": "Test Task", "priority": "high", "description": "Test description"}'
+        "headers": {"X-Api-Key": "test-token", "Content-Type": "application/json"},
+        "body": '{"title": "Test Task", "priority": "high", "description": "Test description"}',
     }
 
 
@@ -73,13 +71,13 @@ def sample_sqs_event():
                     "ApproximateReceiveCount": "1",
                     "SentTimestamp": "1699520000000",
                     "SenderId": "AIDAIT2UOQQY3AUEKVGXU",
-                    "ApproximateFirstReceiveTimestamp": "1699520000000"
+                    "ApproximateFirstReceiveTimestamp": "1699520000000",
                 },
                 "messageAttributes": {},
                 "md5OfBody": "test-md5",
                 "eventSource": "aws:sqs",
                 "eventSourceARN": "arn:aws:sqs:us-east-1:000000000000:test-queue.fifo",
-                "awsRegion": "us-east-1"
+                "awsRegion": "us-east-1",
             }
         ]
     }
