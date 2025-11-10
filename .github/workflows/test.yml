@@ -22,13 +22,48 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Run Lambda tests
+      - name: Run Lambda tests with coverage
         working-directory: ./lambda/tests
         run: |
           chmod +x run-tests.sh
-          ./run-tests.sh
+          ./run-tests.sh | tee test-output.txt
 
-      - name: Test Summary
+      - name: Extract coverage from Docker
         if: always()
+        working-directory: ./lambda/tests
         run: |
-          echo "✅ Test suite completed"
+          # Create a temporary container to extract coverage report
+          docker create --name temp-coverage lambda-tests
+          docker cp temp-coverage:/app/tests/htmlcov ./htmlcov || echo "Coverage report not found"
+          docker rm temp-coverage
+
+      - name: Display Coverage Summary
+        if: always()
+        working-directory: ./lambda/tests
+        run: |
+          echo "## 📊 Test Coverage Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          grep -A 3 "coverage: platform" test-output.txt | tail -n 3 >> $GITHUB_STEP_SUMMARY || echo "Coverage data not found"
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          # Extract total coverage percentage
+          COVERAGE=$(grep "TOTAL" test-output.txt | awk '{print $NF}' || echo "N/A")
+          echo "**Total Coverage: $COVERAGE**" >> $GITHUB_STEP_SUMMARY
+
+          # Check if coverage meets threshold
+          if [ "$COVERAGE" != "N/A" ]; then
+            COVERAGE_NUM=$(echo $COVERAGE | sed 's/%//')
+            if (( $(echo "$COVERAGE_NUM >= 90" | bc -l) )); then
+              echo "✅ Coverage threshold met (≥90%)" >> $GITHUB_STEP_SUMMARY
+            else
+              echo "⚠️ Coverage below threshold (<90%)" >> $GITHUB_STEP_SUMMARY
+            fi
+          fi
+
+      - name: Upload Coverage Report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: lambda/tests/htmlcov
+          retention-days: 30
