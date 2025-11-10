@@ -93,27 +93,27 @@ npm install -g aws-cdk-local
 
 ### Deploy to LocalStack (Local Testing)
 
-# update .env.local with your desired values. 
+update .env.local with your desired values. 
 
-# Load environment variables
+Load environment variables
 `source .env.local`
 
-# Bootstrap CDK (only needed once)
+Bootstrap CDK (only needed once)
 `cdklocal bootstrap`
 
-# Synthesize CloudFormation templates
+Synthesize CloudFormation templates
 `cdklocal synth`
 
-# Deploy all stacks
+Deploy all stacks
 `API_TOKEN=$API_TOKEN ENVIRONMENT=$ENVIRONMENT cdklocal deploy --all --require-approval never`
 
 ( setting the API_TOKEN and ENVIRONMENT variables is optional, but cdklocal might not read from .env.local sometimes )
 
-# Check the URLS:
+Check the URLS:
 That command will output the API Gateway URL after deployment. I recommend you to store in a variable for easier testing, e.g.:
 `export API_URL=https://ltfvqjux6x.execute-api.localhost.localstack.cloud:4566/local/`
 
-# Send a testing request:
+Send a testing request:
 ```bash
 curl -X POST "${API_URL}/tasks" \
     -H "x-api-key: local-dev-token" \
@@ -124,7 +124,7 @@ curl -X POST "${API_URL}/tasks" \
 
 If you pass a wroing API key, you should get a 403 response.
 
-# List the SQS queues to verify the queue was created:
+List the SQS queues to verify the queue was created:
 `aws --endpoint-url=http://localhost:4566 --region us-east-1 sqs list-queues`
 
 
